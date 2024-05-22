@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000
 // bistroBoss
 
 app.use(cors())
-app.use(express())
+app.use(express.json())
 
 
 
@@ -34,6 +34,39 @@ async function run() {
     await client.connect();
 
     const menuCollection = client.db('bistroDB').collection("menu")
+    const cartCollection = client.db('bistroDB').collection("cartItem")
+   
+
+    // cart item related api
+
+    app.post("/carts" , async(req, res)=> {
+
+      const itemCart = req.body
+
+      const result = await cartCollection.insertOne(itemCart);
+
+      res.send(result)
+
+
+
+    })
+
+    app.get('/carts', async(req, res)=> {
+
+      const email = req.query.email
+
+      const query = {
+        email : email
+      }
+
+      const result = await cartCollection.find(query).toArray()
+
+      res.send(result)
+    })
+
+
+
+    // menu related api
 
 
     app.get("/menu", async(req, res)=> {
@@ -41,6 +74,14 @@ async function run() {
         const result = await menuCollection.find().toArray()
         res.send(result)
     })
+
+    
+    
+
+  
+
+
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
