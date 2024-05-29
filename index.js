@@ -325,6 +325,59 @@ async function run() {
 
     })
 
+    // get  the menu item for updating
+
+    app.get('/menu/:id', async(req, res)=> {
+
+      const id = req.params.id
+
+      const query = {
+        _id : new ObjectId(id)
+      }
+
+      const result = await menuCollection.findOne(query)
+
+      res.send(result)
+
+
+    })
+
+    // for updating the item 
+
+    app.patch('/menu/:id', async(req, res)=> {
+      const id = req.params.id
+
+      const item = req.body
+
+      const query = {
+        _id : new ObjectId(id)
+      }
+
+      const updateDoc = {
+
+        $set : {
+
+          name : item.name,
+          category : item.category,
+          price : item.price,
+          recipe : item.recipe,
+          image : item.image
+
+
+
+        }
+      }
+
+
+    const result  = await menuCollection.updateOne(query, updateDoc)
+
+    res.send(result)
+
+      
+
+
+    })
+
     
     
 
