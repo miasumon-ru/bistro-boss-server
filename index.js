@@ -426,6 +426,25 @@ async function run() {
 
     })
 
+    // get the all payments api
+
+    app.get('/payments/:email', async(req, res)=> {
+
+      const email = req.params.email
+
+      console.log(email)
+
+
+      const query = { email : email}
+
+      const result = await paymentCollection.find(query).toArray()
+
+      res.send(result)
+
+
+
+    })
+
     
     
 
